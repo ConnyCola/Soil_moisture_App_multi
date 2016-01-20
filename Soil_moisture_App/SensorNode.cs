@@ -56,8 +56,8 @@ namespace Soil_moisture_App
 
             lb = new Label();
             lb.Name = "lb" + name;
-            lb.Location = new System.Drawing.Point(0, 20);
-            lb.Size = new System.Drawing.Size(50, 20);
+            lb.Location = new System.Drawing.Point(2, 20);
+            lb.Size = new System.Drawing.Size(46, 20);
             lb.Text = value.ToString() + " %";
             lb.Font = new System.Drawing.Font("Segoe Print", 10.162304F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 
@@ -76,7 +76,8 @@ namespace Soil_moisture_App
             gb.Refresh();
             Form1.ActiveForm.Controls.Add(gb);
             Form1.ActiveForm.Refresh();
-            //btn.Click += new System.EventHandler(this.dyn_BTN_Click);
+
+            gb.Click += new System.EventHandler(this.gbClick);
         }
 
         public void changeValue(int v)
@@ -86,6 +87,13 @@ namespace Soil_moisture_App
             lb.Text = value.ToString() + " %";
 
             
+        }
+
+        public void gbClick(object sender, EventArgs e)
+        {
+            string s = sender.ToString();
+            int i = Int16.Parse(s.Substring(38, 2));
+            MessageBox.Show("You clicked on " + i.ToString());
         }
     }
 }

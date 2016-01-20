@@ -492,7 +492,7 @@ namespace Soil_moisture_App
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    Node[i+j*10] = new SensorNode("B" + (i + j*10), i * 55 + 150, j*55 + 20, i+j*10);
+                    Node[i+j*10] = new SensorNode("B" + j + i, i * 55 + 150, j*55 + 20, i+j*10);
                     Node[i+j*10].draw();
                 }
             }
