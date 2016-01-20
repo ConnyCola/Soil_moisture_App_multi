@@ -110,9 +110,9 @@
             // 
             // sendBTN
             // 
-            this.sendBTN.Location = new System.Drawing.Point(1168, 981);
+            this.sendBTN.Location = new System.Drawing.Point(493, 1455);
             this.sendBTN.Name = "sendBTN";
-            this.sendBTN.Size = new System.Drawing.Size(193, 61);
+            this.sendBTN.Size = new System.Drawing.Size(193, 31);
             this.sendBTN.TabIndex = 4;
             this.sendBTN.Text = "SEND test ";
             this.sendBTN.UseVisualStyleBackColor = true;
@@ -123,7 +123,7 @@
             this.txtReceiveBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.txtReceiveBox.Font = new System.Drawing.Font("Consolas", 7.916231F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtReceiveBox.ForeColor = System.Drawing.Color.PaleGreen;
-            this.txtReceiveBox.Location = new System.Drawing.Point(687, 809);
+            this.txtReceiveBox.Location = new System.Drawing.Point(12, 1283);
             this.txtReceiveBox.Multiline = true;
             this.txtReceiveBox.Name = "txtReceiveBox";
             this.txtReceiveBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -132,7 +132,7 @@
             // 
             // txtDataSendBox
             // 
-            this.txtDataSendBox.Location = new System.Drawing.Point(687, 981);
+            this.txtDataSendBox.Location = new System.Drawing.Point(12, 1455);
             this.txtDataSendBox.Name = "txtDataSendBox";
             this.txtDataSendBox.Size = new System.Drawing.Size(475, 31);
             this.txtDataSendBox.TabIndex = 6;
@@ -262,9 +262,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(478, 868);
+            this.button1.Location = new System.Drawing.Point(57, 590);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(193, 133);
+            this.button1.Size = new System.Drawing.Size(192, 62);
             this.button1.TabIndex = 8;
             this.button1.Text = "CMD_TEST";
             this.button1.UseVisualStyleBackColor = true;
@@ -272,9 +272,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(255, 868);
+            this.button2.Location = new System.Drawing.Point(57, 658);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(217, 133);
+            this.button2.Size = new System.Drawing.Size(192, 72);
             this.button2.TabIndex = 9;
             this.button2.Text = "RUN/PAUSE UPDATE";
             this.button2.UseVisualStyleBackColor = true;
@@ -380,7 +380,7 @@
             // 
             // versionLab
             // 
-            this.versionLab.Location = new System.Drawing.Point(12, 1004);
+            this.versionLab.Location = new System.Drawing.Point(1162, 1463);
             this.versionLab.Name = "versionLab";
             this.versionLab.Size = new System.Drawing.Size(193, 23);
             this.versionLab.TabIndex = 17;
@@ -391,7 +391,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1367, 1036);
+            this.ClientSize = new System.Drawing.Size(1367, 1495);
             this.Controls.Add(this.versionLab);
             this.Controls.Add(this.progressBarRSSI);
             this.Controls.Add(this.pictureBox1);

@@ -42,6 +42,8 @@ namespace Soil_moisture_App
         public System.IO.Ports.SerialPort sport;
         public CalibrationForm CaliForm;
 
+        SensorNode[] Node;
+
         public volatile bool _backgroundPause = true;
 
         public string[] CMD_array = {
@@ -485,14 +487,14 @@ namespace Soil_moisture_App
             Soil_moisture_App
             this.Refresh();
              */
-            SensorNode[] Node;
+
             Node = new SensorNode[100];
 
-            for (int j = 0; j < 3; j++)
+            for (int j = 0; j < 10; j++)
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    Node[i+j*10] = new SensorNode("B" + j + i, i * 55 + 150, j*55 + 20, i+j*10);
+                    Node[i+j*10] = new SensorNode(this, "Node" + j + i, i * 65 + 150, j*60 + 20, 100- (i+j*10));
                     Node[i+j*10].draw();
                 }
             }
@@ -561,7 +563,10 @@ namespace Soil_moisture_App
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox1.Checked == true)
-                Form.ActiveForm.Width = 725;
+            {
+                MessageBox.Show("I know that the expert mode can manipulate and potentioly damage the Sensors.\nYou will use it at my own risk!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Form.ActiveForm.Width = 825;
+            }
             else
                 Form.ActiveForm.Width = 161;
         }
@@ -570,8 +575,12 @@ namespace Soil_moisture_App
         {
             Form frm = sender as Form;
             frm.Width = 161;
+            frm.Width = 825;
+            frm.Height = 800;
             pictureBox1.Visible = false;
             pictureBox2.Visible = false;
+
+            //checkBox1.Checked = true;
         }
 
         private void Form1_FormClosing(object sender, FormClosedEventHandler e)
@@ -613,6 +622,19 @@ namespace Soil_moisture_App
                 moisLab.Text = "";
             }
 
+        }
+
+        public int active_Node
+        {
+            get { return Int16.Parse(moisLab.Text); }
+            set { moisLab.Text = Node[value].value.ToString() + " %";
+                  //moisLab.Refresh();
+                  progressBar1.Value = Node[value].value;
+                  //progressBar1.Refresh();
+                  groupBox1.Text = Node[value].name;
+                  //groupBox1.Refresh();
+            }
+            
         }
     }
 }
