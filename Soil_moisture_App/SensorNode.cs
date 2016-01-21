@@ -19,7 +19,10 @@ namespace Soil_moisture_App
         public int value = 0;
         public int min, max;
         public int rssi;
-        public bool error; 
+        public bool error;
+        public int id;
+
+        //public int activeNode;
         
 
         public GroupBox gb;
@@ -33,24 +36,23 @@ namespace Soil_moisture_App
 
         }
 
-        public SensorNode(Form1 form, string n, int x, int y, int v)
+        public SensorNode(Form1 form, int _id, string n, int x, int y, int v)
         {
             this.form = form;
             name = n;
             pos_x = x;
             pos_y = y;
             value = v;
+            id = _id;
         }
 
         public void draw()
         {
-
             gb = new GroupBox();
             gb.Location = new System.Drawing.Point(pos_x, pos_y);
             gb.Size = new System.Drawing.Size(60, 50);
             gb.Name = "gb" + name;
             gb.Text = name;
-
 
             btn = new Button();
             btn.Location = new System.Drawing.Point(5, 10);
@@ -92,22 +94,20 @@ namespace Soil_moisture_App
             pb.Value = value;
             lb.Text = value.ToString() + " %";
 
-            
+            if (id == form.active_Node)
+                form.active_Node = id;
         }
 
         public void gbClick(object sender, EventArgs e)
         {
             GroupBox gb_sender = sender as GroupBox;
-
-            form.active_Node = Int16.Parse(gb_sender.Name.Substring(6, 2));
-
+            form.active_Node = id; //Int16.Parse(gb_sender.Name.Substring(6, 2));
         }
 
         public void lbClick(object sender, EventArgs e)
         {
             Label lb_sender = sender as Label;
-            form.active_Node = Int16.Parse(lb_sender.Name.Substring(6, 2));
-
+            form.active_Node = id; //Int16.Parse(lb_sender.Name.Substring(6, 2));
         }
     }
 }

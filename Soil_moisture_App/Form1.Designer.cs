@@ -155,7 +155,7 @@
             this.groupBox1.Size = new System.Drawing.Size(277, 213);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Sensor1";
+            this.groupBox1.Text = "Node00";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // pictureBox2

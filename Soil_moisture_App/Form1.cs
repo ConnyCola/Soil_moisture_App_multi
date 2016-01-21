@@ -63,6 +63,7 @@ namespace Soil_moisture_App
 
         public struct cmdStruct
         {
+            public int id;
             public byte cmd;
             public int val1;
             public int val2;
@@ -254,7 +255,7 @@ namespace Soil_moisture_App
 
             if (wireless_Flag == true && bytes[0] != (byte)CMDs.CMD_VERS)
             {
-                int node_ID = Int16.Parse(str.Substring(0, 2));
+                cmdBack.id = Int16.Parse(str.Substring(0, 2));
                 cmdBack.cmd = bytes[2 * sizeof(char)];
                 if (str.Length >= 7)
                     cmdBack.val1 = Int16.Parse(str.Substring(3, 4));
@@ -283,6 +284,7 @@ namespace Soil_moisture_App
             switch (c.cmd)
             {
                 case (byte)CMDs.CMD_MOIS:
+                    /*
                     moisLab.Text = c.val1.ToString() + "%";
                     progressBar1.Value = c.val1;
 
@@ -290,7 +292,9 @@ namespace Soil_moisture_App
                     pictureBox2.Visible = false;
                     timer2.Stop();
                     timer2.Start();
-                    
+                    */
+                    Node[c.id].changeValue(c.val1);
+
 
                     break;
                 case (byte)CMDs.CMD_VOLT:
@@ -494,7 +498,7 @@ namespace Soil_moisture_App
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    Node[i+j*10] = new SensorNode(this, "Node" + j + i, i * 65 + 150, j*60 + 20, 100- (i+j*10));
+                    Node[i+j*10] = new SensorNode(this, i+j*10, "Node" + j + i, i * 65 + 150, j*60 + 20, 100- (i+j*10));
                     Node[i+j*10].draw();
                 }
             }
@@ -619,14 +623,14 @@ namespace Soil_moisture_App
             if (_backgroundPause == false)
             {
                 pictureBox2.Visible = true;
-                moisLab.Text = "";
+                //moisLab.Text = "";
             }
 
         }
 
         public int active_Node
         {
-            get { return Int16.Parse(moisLab.Text); }
+            get { return Int16.Parse(groupBox1.Text.Substring(4, 2)); }
             set { moisLab.Text = Node[value].value.ToString() + " %";
                   //moisLab.Refresh();
                   progressBar1.Value = Node[value].value;
