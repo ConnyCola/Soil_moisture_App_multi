@@ -11,8 +11,11 @@ using System.Threading;
 using System.Windows.Forms;
 using System.IO.Ports;
 
+
 namespace Soil_moisture_App
 {
+
+
     public enum CMDs : byte
     {
         CMD_MOIS = (byte)'A',
@@ -38,6 +41,8 @@ namespace Soil_moisture_App
 
     public partial class Form1 : Form
     {
+        public int MAX_NODES = 100;
+
         public SynchronizationContext mainThread;
         public System.IO.Ports.SerialPort sport;
         public CalibrationForm CaliForm;
@@ -137,13 +142,13 @@ namespace Soil_moisture_App
             
         }
 
-        public void send_command(byte cmd, byte val1, byte val2)
+        public void send_command(int id, byte cmd, byte val1, byte val2)
         {
             byte[] b = new byte[4];
             //TODO: change to Node ID
 
-            b[0] = (byte)'1';
-            b[1] = (byte)'0';
+            b[0] = (byte)((id/10)+'0');
+            b[1] = (byte)((id % 10) + '0');
             b[2] = cmd;
             b[3] = 0x0A; // '\n'
 
@@ -177,7 +182,7 @@ namespace Soil_moisture_App
             button1.Text = m.ToString();
             if (m == (byte)FormComModes.CaliStart)
             {
-                send_command((byte)CMDs.CMD_CALI, 1, 0);
+                send_command(active_Node, (byte)CMDs.CMD_CALI, 1, 0);
                 Thread.Sleep(200);
                 #if DEMO
                 CaliForm.changeContext((byte)FormComModes.CaliDry);
@@ -185,7 +190,7 @@ namespace Soil_moisture_App
             }
             else if (m == (byte)FormComModes.CaliDry)
             {
-                send_command((byte)CMDs.CMD_DRY, 1, 0);
+                send_command(active_Node, (byte)CMDs.CMD_DRY, 1, 0);
                 Thread.Sleep(200);
                 #if DEMO
                 CaliForm.changeContext((byte)FormComModes.CaliWet);
@@ -193,18 +198,18 @@ namespace Soil_moisture_App
             }
             else if (m == (byte)FormComModes.CaliWet)
             {
-                send_command((byte)CMDs.CMD_WET, 1, 0);
+                send_command(active_Node, (byte)CMDs.CMD_WET, 1, 0);
                 Thread.Sleep(200);
             }
             else if ((m == (byte)FormComModes.CaliFin) || (m == (byte)FormComModes.CaliError))
             {
-                send_command((byte)CMDs.CMD_FIN, 1, 0);
+                send_command(active_Node, (byte)CMDs.CMD_FIN, 1, 0);
                 Thread.Sleep(1000);
 
-                send_command((byte)CMDs.CMD_MIN, 0, 0);
+                send_command(active_Node, (byte)CMDs.CMD_MIN, 0, 0);
                 Thread.Sleep(300);
 
-                send_command((byte)CMDs.CMD_MAX, 0, 0);
+                send_command(active_Node, (byte)CMDs.CMD_MAX, 0, 0);
 
                 Thread.Sleep(300);
                 CaliForm.Close();
@@ -293,7 +298,10 @@ namespace Soil_moisture_App
                     timer2.Stop();
                     timer2.Start();
                     */
-                    Node[c.id].changeValue(c.val1);
+                    Node[c.id].set_mois(c.val1);
+                    Node[c.id].redraw();
+
+                    Node[c.id].lastping_sensor = 0;
 
 
                     break;
@@ -346,16 +354,27 @@ namespace Soil_moisture_App
 
                     if (c.val2 >= 1000)
                     {  //Veriosn with Wireless if build no. > 1000
-                        pictureBox1.Visible = true;
+                        pictureBoxRssi.Visible = true;
                         wireless_Flag = true;
                     }
+
+                    Node[c.id].set_active(true);
 
 
                     break;
                 case(byte)CMDs.CMD_RSSI:
                     txtReceiveBox.AppendText("[" + get_dtn() + "] " + "received RSSI :" + c.val1.ToString() +"\n");
+
+                    
+                    Node[c.id].set_rssi(c.val1);
+                    Node[c.id].lastping_rssi = 0;
+                    Node[c.id].redraw();
+
+                    /*
                     rssiLab.Text = "-" + c.val1.ToString();
                     rssiLab.Show();
+
+
                     progressBarRSSI.Minimum = 0;
                     progressBarRSSI.Maximum = 40;
                     if((c.val1 <= 120) && (c.val1 >= 80))
@@ -369,10 +388,10 @@ namespace Soil_moisture_App
                         pictureBox1.Image = Soil_moisture_App.Properties.Resources.wifi_1;
                     else
                         pictureBox1.Image = Soil_moisture_App.Properties.Resources.wifi_0;
-                    
+                    */
+
                     //start timout timer
-                    timer1.Stop();
-                    timer1.Start();
+
                     break;
                 default:
                     back = false;
@@ -397,22 +416,38 @@ namespace Soil_moisture_App
             //check the Version to check for right Com Port
             int tout = 20;
             initFlag = 0;
-            send_command((byte)CMDs.CMD_VERS, 0, 0);
+
+            for (int i = 0; i < MAX_NODES; i++)
+            {
+                send_command(i, (byte)CMDs.CMD_VERS, 0, 0);
+                Thread.Sleep(100);
+                //send a second time in case of a wirless communication
+                send_command(i, (byte)CMDs.CMD_VERS, 0, 0);
+                trackBar1.Value = i;
+                label7.Text = i.ToString();
+            }
+            /*
+            send_command(active_Node, (byte)CMDs.CMD_VERS, 0, 0);
             Thread.Sleep(300);
             //send a second time in case of a wirless communication
-            send_command((byte)CMDs.CMD_VERS, 0, 0);
+            send_command(active_Node, (byte)CMDs.CMD_VERS, 0, 0);
+            */
 
+            /*
 
             Thread.Sleep(300);
-            send_command((byte)CMDs.CMD_MIN, 0, 0);
+            send_command(active_Node, (byte)CMDs.CMD_MIN, 0, 0);
             Thread.Sleep(300);
-            send_command((byte)CMDs.CMD_MAX, 0, 0);
+            send_command(active_Node, (byte)CMDs.CMD_MAX, 0, 0);
             Thread.Sleep(300);
-            send_command((byte)CMDs.CMD_VERS, 0, 0);
+            send_command(active_Node, (byte)CMDs.CMD_VERS, 0, 0);
             Thread.Sleep(300);
-
-            send_command((byte)CMDs.CMD_MOIS, 0, 0);
-            timer2.Start();
+            
+            send_command(active_Node, (byte)CMDs.CMD_MOIS, 0, 0);
+             
+             */
+            timerErrorSensor.Start();
+            timerErrorRssi.Start();
 
             Thread.Sleep(300);
             //Thread.Sleep(1000);
@@ -465,7 +500,7 @@ namespace Soil_moisture_App
             }
 
             wireless_Flag = false;
-            pictureBox1.Visible = false;
+            pictureBoxRssi.Visible = false;
         }
 
         private void caliBTN_Click(object sender, EventArgs e)
@@ -498,8 +533,11 @@ namespace Soil_moisture_App
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    Node[i+j*10] = new SensorNode(this, i+j*10, "Node" + j + i, i * 65 + 150, j*60 + 20, 100- (i+j*10));
-                    Node[i+j*10].draw();
+                    if ((i + j * 10) < MAX_NODES) {
+                        Node[i+j*10] = new SensorNode(this, i+j*10, "Node" + j + i, i * 65 + 150, j*60 + 20, 100- (i+j*10));
+                        Node[i+j*10].draw(); 
+                    }
+
                 }
             }
 
@@ -515,21 +553,41 @@ namespace Soil_moisture_App
             int runs = 0;
             while (true)
             {
+                int scanedNode = 0;
                 while (!_backgroundPause)
                 {
-                    Thread.Sleep(250);
+                    scanedNode += 1;
+                    if (scanedNode == MAX_NODES)
+                        scanedNode = 0;
+
+                    Thread.Sleep(50);
                     runs++;
                     mainThread.Send((object state) =>
                     {
                         //txtReceiveBox.AppendText("[" + get_dtn() + "] " + "background thread: working... " + runs + "\n");
                     
                     }, null);
+
+
                     if ((runs % 5 == 0) && (wireless_Flag == true)){
-                        send_command((byte)CMDs.CMD_RSSI, 1, 0);
+                        send_command(active_Node, (byte)CMDs.CMD_RSSI, 1, 0);
                         runs = 0;
                     }
                     else
-                        send_command((byte)CMDs.CMD_MOIS, 1, 0);
+                        send_command(active_Node, (byte)CMDs.CMD_MOIS, 1, 0);
+
+                    //Thread.Sleep(50);
+                    //send_command(scanedNode, (byte)CMDs.CMD_MOIS, 1, 0);
+                    Thread.Sleep(50);
+                    send_command(scanedNode, (byte)CMDs.CMD_RSSI, 1, 0);
+
+                    mainThread.Send((object state) =>
+                    {
+                        trackBar1.Value = scanedNode;
+                        label7.Text = scanedNode.ToString();
+                    }, null);
+
+
                     //_backgroundPause = true;
                 }
                 Console.WriteLine("worker thread: terminating gracefully.");
@@ -546,22 +604,22 @@ namespace Soil_moisture_App
 
         private void button3_Click(object sender, EventArgs e)
         {
-            send_command((byte)CMDs.CMD_DRY, 0, 0);
+            send_command(active_Node, (byte)CMDs.CMD_DRY, 0, 0);
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            send_command((byte)CMDs.CMD_WET, 0, 0);
+            send_command(active_Node, (byte)CMDs.CMD_WET, 0, 0);
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            send_command((byte)CMDs.CMD_MIN, 0, 0);
+            send_command(active_Node, (byte)CMDs.CMD_MIN, 0, 0);
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
-            send_command((byte)CMDs.CMD_MAX, 0, 0);
+            send_command(active_Node, (byte)CMDs.CMD_MAX, 0, 0);
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -581,8 +639,24 @@ namespace Soil_moisture_App
             frm.Width = 161;
             frm.Width = 825;
             frm.Height = 800;
-            pictureBox1.Visible = false;
-            pictureBox2.Visible = false;
+            pictureBoxRssi.Visible = false;
+            pictureBoxErrorSensor.Visible = false;
+
+            Node = new SensorNode[100];
+
+            for (int j = 0; j < 10; j++)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    if ((i + j * 10) < MAX_NODES)
+                    {
+                        Node[i + j * 10] = new SensorNode(this, i + j * 10, "Node" + j + i, i * 65 + 150, j * 60 + 20, 100 - (i + j * 10));
+                        Node[i + j * 10].draw();
+                        Node[i + j * 10].set_active(false);
+                    }
+
+                }
+            }
 
             //checkBox1.Checked = true;
         }
@@ -613,30 +687,97 @@ namespace Soil_moisture_App
             disconBTN_Click(null, null);
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void timerErrorRssi_Tick(object sender, EventArgs e)
         {
-            pictureBox1.Image = Soil_moisture_App.Properties.Resources.wifi_err;
+            for (int i = 0; i < MAX_NODES; i++)
+			{
+			    Node[i].lastping_rssi += 1;
+
+                if (Node[i].lastping_rssi >= 8)
+                {
+                    Node[i].error_rssi = true;
+                    Node[i].set_active(false);
+                    if (i == active_Node)
+                        Node[i].redraw();
+                }
+                else if ((i == active_Node) && (Node[i].lastping_rssi >= 2))
+                {
+                    Node[i].error_rssi = true;
+                    Node[i].set_active(false);
+                    if (i == active_Node)
+                        Node[i].redraw();
+                }
+                else
+                {
+                    Node[i].error_rssi = false;
+                    Node[i].set_active(true);
+
+                }
+
+                
+			}
+            
+            //pictureBox1.Image = Soil_moisture_App.Properties.Resources.wifi_err;
         }
 
-        private void timer2_Tick(object sender, EventArgs e)
+        private void timerErrorSensor_Tick(object sender, EventArgs e)
         {
             if (_backgroundPause == false)
             {
-                pictureBox2.Visible = true;
+                //pictureBox2.Visible = true;
                 //moisLab.Text = "";
+
+                for (int i = 0; i < MAX_NODES; i++)
+                {
+                    Node[i].lastping_sensor += 1;
+                    if (Node[i].lastping_sensor >= 2)
+                        Node[i].error_sensor = true;
+                    else
+                        Node[i].error_sensor = false;
+
+                }
             }
 
         }
 
         public int active_Node
         {
-            get { return Int16.Parse(groupBox1.Text.Substring(4, 2)); }
-            set { moisLab.Text = Node[value].value.ToString() + " %";
-                  //moisLab.Refresh();
-                  progressBar1.Value = Node[value].value;
-                  //progressBar1.Refresh();
-                  groupBox1.Text = Node[value].name;
-                  //groupBox1.Refresh();
+            get {   return Int16.Parse(groupBox1.Text.Substring(4, 2)); }
+            set {   moisLab.Text = Node[value].mois.ToString() + " %";
+                    
+                // Mois ProgessBAR
+                    progressBar1.Value = Node[value].mois;
+                // GroupBox
+                    groupBox1.Text = Node[value].name;
+
+                // RSSI
+                    rssiLab.Text = "-" + Node[value].rssi.ToString();
+                    rssiLab.Show();
+                   
+                    progressBarRSSI.Minimum = 0;
+                    progressBarRSSI.Maximum = 40;
+                    if((Node[value].rssi <= 120) && (Node[value].rssi >= 80))
+                      progressBarRSSI.Value = 120 - Node[value].rssi;
+
+                    if (Node[value].rssi <= 94)
+                      pictureBoxRssi.Image = Soil_moisture_App.Properties.Resources.wifi3;
+                    else if (Node[value].rssi <= 105) 
+                      pictureBoxRssi.Image = Soil_moisture_App.Properties.Resources.wifi_2;
+                    else if (Node[value].rssi <= 110)
+                      pictureBoxRssi.Image = Soil_moisture_App.Properties.Resources.wifi_1;
+                    else
+                      pictureBoxRssi.Image = Soil_moisture_App.Properties.Resources.wifi_0;
+                    
+                // ERROR
+                    if (Node[value].error_rssi == true)
+                        pictureBoxRssi.Image = Soil_moisture_App.Properties.Resources.wifi_err;
+                    if (Node[value].error_sensor == true)
+                        pictureBoxErrorSensor.Visible = true;
+                    else
+                        pictureBoxErrorSensor.Visible = false;
+
+                    
+
             }
             
         }

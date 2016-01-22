@@ -16,11 +16,17 @@ namespace Soil_moisture_App
     {
         public int pos_x, pos_y;
         public string name;
-        public int value = 0;
+        public int mois = 0;
         public int min, max;
         public int rssi;
-        public bool error;
+        public bool error_rssi;
+        public bool error_sensor;
         public int id;
+        public int lastping_rssi = 10;
+        public int lastping_sensor = 10;
+        public int version;
+        public int build;
+        public bool active = false;
 
         //public int activeNode;
         
@@ -42,7 +48,7 @@ namespace Soil_moisture_App
             name = n;
             pos_x = x;
             pos_y = y;
-            value = v;
+            mois = v;
             id = _id;
         }
 
@@ -66,7 +72,7 @@ namespace Soil_moisture_App
             lb.Name = "lb" + name;
             lb.Location = new System.Drawing.Point(2, 20);
             lb.Size = new System.Drawing.Size(56, 20);
-            lb.Text = value.ToString() + " %";
+            lb.Text = mois.ToString() + " %";
             lb.Font = new System.Drawing.Font("Segoe Print", 10.162304F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 
 
@@ -75,7 +81,7 @@ namespace Soil_moisture_App
             pb.Size = new System.Drawing.Size(60, 5);
             pb.Name = "pb" + name;
 
-            pb.Value = value;
+            pb.Value = mois;
 
 
             //gb.Controls.Add(btn);
@@ -88,15 +94,45 @@ namespace Soil_moisture_App
             lb.Click += new System.EventHandler(this.lbClick);
         }
 
-        public void changeValue(int v)
+        public void set_mois(int v)
         {
-            value = v;
-            pb.Value = value;
-            lb.Text = value.ToString() + " %";
+            mois = v;
+            pb.Value = mois;
+            lb.Text = mois.ToString() + " %";
+        }
 
+        public void set_rssi(int r)
+        {
+            rssi = r;
+        }
+
+        public void set_active(bool a)
+        {
+            active = a;
+            if (active == true)
+            {
+                pb.Visible = true;
+                lb.Visible = true;
+                gb.Visible = true;
+                gb.Enabled = true;
+
+            }
+            else
+            {
+                pb.Visible = false;
+                lb.Visible = false;
+                gb.Enabled = false;
+                //gb.Visible = false;
+            }
+
+        }
+
+        public void redraw(){
+            //TODO: doppelter check auf active_node
             if (id == form.active_Node)
                 form.active_Node = id;
         }
+
 
         public void gbClick(object sender, EventArgs e)
         {

@@ -38,7 +38,7 @@
             this.txtReceiveBox = new System.Windows.Forms.TextBox();
             this.txtDataSendBox = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxErrorSensor = new System.Windows.Forms.PictureBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -57,14 +57,17 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.timerErrorRssi = new System.Windows.Forms.Timer(this.components);
             this.progressBarRSSI = new System.Windows.Forms.ProgressBar();
-            this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.timerErrorSensor = new System.Windows.Forms.Timer(this.components);
+            this.pictureBoxRssi = new System.Windows.Forms.PictureBox();
             this.versionLab = new System.Windows.Forms.Label();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.label7 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxErrorSensor)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRssi)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // conBTN
@@ -140,7 +143,7 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.Control;
-            this.groupBox1.Controls.Add(this.pictureBox2);
+            this.groupBox1.Controls.Add(this.pictureBoxErrorSensor);
             this.groupBox1.Controls.Add(this.progressBar1);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
@@ -158,15 +161,15 @@
             this.groupBox1.Text = "Node00";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
-            // pictureBox2
+            // pictureBoxErrorSensor
             // 
-            this.pictureBox2.Image = global::Soil_moisture_App.Properties.Resources.warning;
-            this.pictureBox2.Location = new System.Drawing.Point(19, 68);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(84, 70);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 17;
-            this.pictureBox2.TabStop = false;
+            this.pictureBoxErrorSensor.Image = global::Soil_moisture_App.Properties.Resources.warning;
+            this.pictureBoxErrorSensor.Location = new System.Drawing.Point(19, 68);
+            this.pictureBoxErrorSensor.Name = "pictureBoxErrorSensor";
+            this.pictureBoxErrorSensor.Size = new System.Drawing.Size(84, 70);
+            this.pictureBoxErrorSensor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxErrorSensor.TabIndex = 17;
+            this.pictureBoxErrorSensor.TabStop = false;
             // 
             // progressBar1
             // 
@@ -349,10 +352,10 @@
             this.label6.TabIndex = 13;
             this.label6.Text = "get";
             // 
-            // timer1
+            // timerErrorRssi
             // 
-            this.timer1.Interval = 2000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timerErrorRssi.Interval = 2000;
+            this.timerErrorRssi.Tick += new System.EventHandler(this.timerErrorRssi_Tick);
             // 
             // progressBarRSSI
             // 
@@ -361,22 +364,22 @@
             this.progressBarRSSI.Size = new System.Drawing.Size(187, 10);
             this.progressBarRSSI.TabIndex = 16;
             // 
-            // timer2
+            // timerErrorSensor
             // 
-            this.timer2.Interval = 1000;
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            this.timerErrorSensor.Interval = 1000;
+            this.timerErrorSensor.Tick += new System.EventHandler(this.timerErrorSensor_Tick);
             // 
-            // pictureBox1
+            // pictureBoxRssi
             // 
-            this.pictureBox1.Image = global::Soil_moisture_App.Properties.Resources.wifi_0;
-            this.pictureBox1.Location = new System.Drawing.Point(220, 226);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(65, 60);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 14;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Visible = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            this.pictureBoxRssi.Image = global::Soil_moisture_App.Properties.Resources.wifi_0;
+            this.pictureBoxRssi.Location = new System.Drawing.Point(220, 226);
+            this.pictureBoxRssi.Name = "pictureBoxRssi";
+            this.pictureBoxRssi.Size = new System.Drawing.Size(65, 60);
+            this.pictureBoxRssi.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxRssi.TabIndex = 14;
+            this.pictureBoxRssi.TabStop = false;
+            this.pictureBoxRssi.Visible = false;
+            this.pictureBoxRssi.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // versionLab
             // 
@@ -387,14 +390,33 @@
             this.versionLab.Text = "Version";
             this.versionLab.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // trackBar1
+            // 
+            this.trackBar1.Location = new System.Drawing.Point(38, 1044);
+            this.trackBar1.Maximum = 100;
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(226, 90);
+            this.trackBar1.TabIndex = 18;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(179, 1099);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(70, 26);
+            this.label7.TabIndex = 19;
+            this.label7.Text = "label7";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1367, 1495);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.versionLab);
             this.Controls.Add(this.progressBarRSSI);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.pictureBoxRssi);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label2);
@@ -423,8 +445,9 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxErrorSensor)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRssi)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -458,12 +481,14 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Timer timerErrorRssi;
+        private System.Windows.Forms.PictureBox pictureBoxRssi;
         private System.Windows.Forms.ProgressBar progressBarRSSI;
-        private System.Windows.Forms.Timer timer2;
-        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.Timer timerErrorSensor;
+        private System.Windows.Forms.PictureBox pictureBoxErrorSensor;
         private System.Windows.Forms.Label versionLab;
+        private System.Windows.Forms.TrackBar trackBar1;
+        private System.Windows.Forms.Label label7;
     }
 }
 
