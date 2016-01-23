@@ -37,9 +37,9 @@
             this.sendBTN = new System.Windows.Forms.Button();
             this.txtReceiveBox = new System.Windows.Forms.TextBox();
             this.txtDataSendBox = new System.Windows.Forms.TextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBoxActiveNode = new System.Windows.Forms.GroupBox();
             this.pictureBoxErrorSensor = new System.Windows.Forms.PictureBox();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.progressBarActiveNode = new System.Windows.Forms.ProgressBar();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -64,10 +64,13 @@
             this.versionLab = new System.Windows.Forms.Label();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.label7 = new System.Windows.Forms.Label();
-            this.groupBox1.SuspendLayout();
+            this.trackBar2 = new System.Windows.Forms.TrackBar();
+            this.label8 = new System.Windows.Forms.Label();
+            this.groupBoxActiveNode.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxErrorSensor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRssi)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
             this.SuspendLayout();
             // 
             // conBTN
@@ -113,7 +116,7 @@
             // 
             // sendBTN
             // 
-            this.sendBTN.Location = new System.Drawing.Point(493, 1455);
+            this.sendBTN.Location = new System.Drawing.Point(493, 1357);
             this.sendBTN.Name = "sendBTN";
             this.sendBTN.Size = new System.Drawing.Size(193, 31);
             this.sendBTN.TabIndex = 4;
@@ -126,7 +129,7 @@
             this.txtReceiveBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.txtReceiveBox.Font = new System.Drawing.Font("Consolas", 7.916231F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtReceiveBox.ForeColor = System.Drawing.Color.PaleGreen;
-            this.txtReceiveBox.Location = new System.Drawing.Point(12, 1283);
+            this.txtReceiveBox.Location = new System.Drawing.Point(12, 1185);
             this.txtReceiveBox.Multiline = true;
             this.txtReceiveBox.Name = "txtReceiveBox";
             this.txtReceiveBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -135,31 +138,31 @@
             // 
             // txtDataSendBox
             // 
-            this.txtDataSendBox.Location = new System.Drawing.Point(12, 1455);
+            this.txtDataSendBox.Location = new System.Drawing.Point(12, 1357);
             this.txtDataSendBox.Name = "txtDataSendBox";
             this.txtDataSendBox.Size = new System.Drawing.Size(475, 31);
             this.txtDataSendBox.TabIndex = 6;
             // 
-            // groupBox1
+            // groupBoxActiveNode
             // 
-            this.groupBox1.BackColor = System.Drawing.SystemColors.Control;
-            this.groupBox1.Controls.Add(this.pictureBoxErrorSensor);
-            this.groupBox1.Controls.Add(this.progressBar1);
-            this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.maxMoisLab);
-            this.groupBox1.Controls.Add(this.minMoisLab);
-            this.groupBox1.Controls.Add(this.moisLab);
-            this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.916231F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(12, 278);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(277, 213);
-            this.groupBox1.TabIndex = 7;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Node00";
-            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            this.groupBoxActiveNode.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBoxActiveNode.Controls.Add(this.pictureBoxErrorSensor);
+            this.groupBoxActiveNode.Controls.Add(this.progressBarActiveNode);
+            this.groupBoxActiveNode.Controls.Add(this.label4);
+            this.groupBoxActiveNode.Controls.Add(this.label3);
+            this.groupBoxActiveNode.Controls.Add(this.label1);
+            this.groupBoxActiveNode.Controls.Add(this.maxMoisLab);
+            this.groupBoxActiveNode.Controls.Add(this.minMoisLab);
+            this.groupBoxActiveNode.Controls.Add(this.moisLab);
+            this.groupBoxActiveNode.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.groupBoxActiveNode.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.916231F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBoxActiveNode.Location = new System.Drawing.Point(12, 278);
+            this.groupBoxActiveNode.Name = "groupBoxActiveNode";
+            this.groupBoxActiveNode.Size = new System.Drawing.Size(277, 213);
+            this.groupBoxActiveNode.TabIndex = 7;
+            this.groupBoxActiveNode.TabStop = false;
+            this.groupBoxActiveNode.Text = "Node00";
+            this.groupBoxActiveNode.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // pictureBoxErrorSensor
             // 
@@ -171,15 +174,15 @@
             this.pictureBoxErrorSensor.TabIndex = 17;
             this.pictureBoxErrorSensor.TabStop = false;
             // 
-            // progressBar1
+            // progressBarActiveNode
             // 
-            this.progressBar1.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.progressBar1.Location = new System.Drawing.Point(0, 195);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.RightToLeftLayout = true;
-            this.progressBar1.Size = new System.Drawing.Size(277, 22);
-            this.progressBar1.Step = 1;
-            this.progressBar1.TabIndex = 11;
+            this.progressBarActiveNode.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.progressBarActiveNode.Location = new System.Drawing.Point(0, 195);
+            this.progressBarActiveNode.Name = "progressBarActiveNode";
+            this.progressBarActiveNode.RightToLeftLayout = true;
+            this.progressBarActiveNode.Size = new System.Drawing.Size(277, 22);
+            this.progressBarActiveNode.Step = 1;
+            this.progressBarActiveNode.TabIndex = 11;
             // 
             // label4
             // 
@@ -247,7 +250,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe Print", 7.162304F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(68, 781);
+            this.label2.Location = new System.Drawing.Point(67, 719);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(47, 35);
             this.label2.TabIndex = 0;
@@ -256,7 +259,7 @@
             // rssiLab
             // 
             this.rssiLab.Font = new System.Drawing.Font("Segoe Print", 18.09424F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rssiLab.Location = new System.Drawing.Point(16, 769);
+            this.rssiLab.Location = new System.Drawing.Point(15, 707);
             this.rssiLab.Name = "rssiLab";
             this.rssiLab.Size = new System.Drawing.Size(233, 80);
             this.rssiLab.TabIndex = 0;
@@ -265,7 +268,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(57, 590);
+            this.button1.Location = new System.Drawing.Point(56, 528);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(192, 62);
             this.button1.TabIndex = 8;
@@ -275,7 +278,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(57, 658);
+            this.button2.Location = new System.Drawing.Point(56, 596);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(192, 72);
             this.button2.TabIndex = 9;
@@ -285,7 +288,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(57, 887);
+            this.button3.Location = new System.Drawing.Point(56, 825);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(93, 43);
             this.button3.TabIndex = 10;
@@ -295,7 +298,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(156, 887);
+            this.button4.Location = new System.Drawing.Point(155, 825);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(93, 43);
             this.button4.TabIndex = 10;
@@ -305,7 +308,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(57, 958);
+            this.button5.Location = new System.Drawing.Point(56, 896);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(93, 43);
             this.button5.TabIndex = 1;
@@ -315,7 +318,7 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(156, 958);
+            this.button6.Location = new System.Drawing.Point(155, 896);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(93, 43);
             this.button6.TabIndex = 1;
@@ -337,7 +340,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(57, 861);
+            this.label5.Location = new System.Drawing.Point(56, 799);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(41, 26);
             this.label5.TabIndex = 13;
@@ -346,7 +349,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(57, 929);
+            this.label6.Location = new System.Drawing.Point(56, 867);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(42, 26);
             this.label6.TabIndex = 13;
@@ -359,7 +362,7 @@
             // 
             // progressBarRSSI
             // 
-            this.progressBarRSSI.Location = new System.Drawing.Point(57, 847);
+            this.progressBarRSSI.Location = new System.Drawing.Point(56, 785);
             this.progressBarRSSI.Name = "progressBarRSSI";
             this.progressBarRSSI.Size = new System.Drawing.Size(187, 10);
             this.progressBarRSSI.TabIndex = 16;
@@ -383,7 +386,7 @@
             // 
             // versionLab
             // 
-            this.versionLab.Location = new System.Drawing.Point(1162, 1463);
+            this.versionLab.Location = new System.Drawing.Point(804, 1357);
             this.versionLab.Name = "versionLab";
             this.versionLab.Size = new System.Drawing.Size(193, 23);
             this.versionLab.TabIndex = 17;
@@ -392,7 +395,7 @@
             // 
             // trackBar1
             // 
-            this.trackBar1.Location = new System.Drawing.Point(38, 1044);
+            this.trackBar1.Location = new System.Drawing.Point(37, 982);
             this.trackBar1.Maximum = 100;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(226, 90);
@@ -401,17 +404,38 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(179, 1099);
+            this.label7.Location = new System.Drawing.Point(178, 1037);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(70, 26);
             this.label7.TabIndex = 19;
             this.label7.Text = "label7";
             // 
+            // trackBar2
+            // 
+            this.trackBar2.Location = new System.Drawing.Point(38, 1078);
+            this.trackBar2.Maximum = 200;
+            this.trackBar2.Name = "trackBar2";
+            this.trackBar2.Size = new System.Drawing.Size(210, 90);
+            this.trackBar2.TabIndex = 20;
+            this.trackBar2.Value = 50;
+            this.trackBar2.ValueChanged += new System.EventHandler(this.trackBar2_ValueChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(173, 1142);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(70, 26);
+            this.label8.TabIndex = 21;
+            this.label8.Text = "label8";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1367, 1495);
+            this.ClientSize = new System.Drawing.Size(1367, 1401);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.trackBar2);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.versionLab);
@@ -428,7 +452,7 @@
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.groupBoxActiveNode);
             this.Controls.Add(this.txtDataSendBox);
             this.Controls.Add(this.txtReceiveBox);
             this.Controls.Add(this.sendBTN);
@@ -443,11 +467,12 @@
             this.Text = "Soil moisture App";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.groupBoxActiveNode.ResumeLayout(false);
+            this.groupBoxActiveNode.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxErrorSensor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRssi)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -462,7 +487,7 @@
         private System.Windows.Forms.Button sendBTN;
         private System.Windows.Forms.TextBox txtReceiveBox;
         private System.Windows.Forms.TextBox txtDataSendBox;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBoxActiveNode;
         private System.Windows.Forms.Label moisLab;
         private System.Windows.Forms.Label maxMoisLab;
         private System.Windows.Forms.Label minMoisLab;
@@ -477,7 +502,7 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ProgressBar progressBarActiveNode;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
@@ -489,6 +514,8 @@
         private System.Windows.Forms.Label versionLab;
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TrackBar trackBar2;
+        private System.Windows.Forms.Label label8;
     }
 }
 

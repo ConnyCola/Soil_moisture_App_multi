@@ -42,7 +42,7 @@ namespace Soil_moisture_App
     public partial class Form1 : Form
     {
         public int MAX_NODES = 100;
-
+        public int loop_delay_time;
         public SynchronizationContext mainThread;
         public System.IO.Ports.SerialPort sport;
         public CalibrationForm CaliForm;
@@ -231,18 +231,22 @@ namespace Soil_moisture_App
             String str = sport.ReadLine();
 
             cmdStruct cmdBack = decodeReceivedCmd(str);
-            
-            mainThread.Send((object state) =>
+            if (cmdBack.id != -1)
             {
-                if (processReceivedCmd(cmdBack))
-                    txtReceiveBox.AppendText("[" + get_dtn() + "] " + "rec: cmd: " + CMD_array[Convert.ToByte(cmdBack.cmd) - 'A'] + "  val1: " + cmdBack.val1.ToString() + "  val2: " + cmdBack.val2.ToString() + "\n");
-                    //if(cmdBack.cmd == (byte)CMDs.CMD_RSSI)
-                    //    txtReceiveBox.AppendText("[" + get_dtn() + "] " + "rec: cmd: " + str.ToString() + "\n");
+                mainThread.Send((object state) =>
+                {
+                    if (processReceivedCmd(cmdBack))
+                        txtReceiveBox.AppendText("[" + get_dtn() + "] " + "rec: cmd: " + CMD_array[Convert.ToByte(cmdBack.cmd) - 'A'] + "  val1: " + cmdBack.val1.ToString() + "  val2: " + cmdBack.val2.ToString() + "\n");
+                        //if(cmdBack.cmd == (byte)CMDs.CMD_RSSI)
+                        //    txtReceiveBox.AppendText("[" + get_dtn() + "] " + "rec: cmd: " + str.ToString() + "\n");
 
-                else
-                    txtReceiveBox.AppendText("[" + get_dtn() + "] " + "rec: cmd: " + str.ToString() + "\n");
+                    else
+                        txtReceiveBox.AppendText("[" + get_dtn() + "] " + "rec: cmd: " + str.ToString() + "\n");
 
-            }, null);
+                }, null);
+            }
+
+
         }
 
         private cmdStruct decodeReceivedCmd(string str)
@@ -267,6 +271,7 @@ namespace Soil_moisture_App
                 //TODO: length is somehow 11 but no conntent
                 if (str.Length >= 11)
                     cmdBack.val2 = Int16.Parse(str.Substring(7, 4));
+
                 return cmdBack;
             }
             else
@@ -276,6 +281,7 @@ namespace Soil_moisture_App
                     cmdBack.val1 = Int16.Parse(str.Substring(1, 4));
                 if (str.Length >= 9)
                     cmdBack.val2 = Int16.Parse(str.Substring(5, 4));
+
                 return cmdBack;
             }
             
@@ -560,7 +566,7 @@ namespace Soil_moisture_App
                     if (scanedNode == MAX_NODES)
                         scanedNode = 0;
 
-                    Thread.Sleep(50);
+                    Thread.Sleep(loop_delay_time);
                     runs++;
                     mainThread.Send((object state) =>
                     {
@@ -575,11 +581,13 @@ namespace Soil_moisture_App
                     }
                     else
                         send_command(active_Node, (byte)CMDs.CMD_MOIS, 1, 0);
+                    
+                    Thread.Sleep(loop_delay_time);
+                    send_command(scanedNode, (byte)CMDs.CMD_MOIS, 1, 0);
 
-                    //Thread.Sleep(50);
-                    //send_command(scanedNode, (byte)CMDs.CMD_MOIS, 1, 0);
-                    Thread.Sleep(50);
+                    Thread.Sleep(loop_delay_time);
                     send_command(scanedNode, (byte)CMDs.CMD_RSSI, 1, 0);
+                    
 
                     mainThread.Send((object state) =>
                     {
@@ -638,9 +646,10 @@ namespace Soil_moisture_App
             Form frm = sender as Form;
             frm.Width = 161;
             frm.Width = 825;
-            frm.Height = 800;
+            frm.Height = 780;
             pictureBoxRssi.Visible = false;
             pictureBoxErrorSensor.Visible = false;
+            label8.Text = loop_delay_time.ToString();
 
             Node = new SensorNode[100];
 
@@ -693,7 +702,7 @@ namespace Soil_moisture_App
 			{
 			    Node[i].lastping_rssi += 1;
 
-                if (Node[i].lastping_rssi >= 8)
+                if (Node[i].lastping_rssi >= 10)
                 {
                     Node[i].error_rssi = true;
                     Node[i].set_active(false);
@@ -742,13 +751,13 @@ namespace Soil_moisture_App
 
         public int active_Node
         {
-            get {   return Int16.Parse(groupBox1.Text.Substring(4, 2)); }
-            set {   moisLab.Text = Node[value].mois.ToString() + " %";
+            get {   return Int16.Parse(groupBoxActiveNode.Text.Substring(4, 2)); }
+            set {   moisLab.Text = Node[value].mois.ToString() + "%";
                     
                 // Mois ProgessBAR
-                    progressBar1.Value = Node[value].mois;
+                    progressBarActiveNode.Value = Node[value].mois;
                 // GroupBox
-                    groupBox1.Text = Node[value].name;
+                    groupBoxActiveNode.Text = Node[value].name;
 
                 // RSSI
                     rssiLab.Text = "-" + Node[value].rssi.ToString();
@@ -780,6 +789,12 @@ namespace Soil_moisture_App
 
             }
             
+        }
+
+        private void trackBar2_ValueChanged(object sender, EventArgs e)
+        {
+            loop_delay_time = trackBar2.Value;
+            label8.Text = loop_delay_time.ToString();
         }
     }
 }
