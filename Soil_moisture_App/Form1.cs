@@ -604,6 +604,7 @@ namespace Soil_moisture_App
 
         private void button2_Click(object sender, EventArgs e)
         {
+            
             if (_backgroundPause == true)
                 _backgroundPause = false;
             else
@@ -634,11 +635,33 @@ namespace Soil_moisture_App
         {
             if (checkBox1.Checked == true)
             {
-                MessageBox.Show("I know that the expert mode can manipulate and potentioly damage the Sensors.\nYou will use it at my own risk!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                Form.ActiveForm.Width = 825;
+                MessageBox.Show("Expert mode can manipulate and potentioly damage the Sensors.\nYou will use it at my own risk!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //Form.ActiveForm.Width = 825;
             }
-            else
-                Form.ActiveForm.Width = 161;
+            ExpertMode(checkBox1.Checked);
+        }
+
+        private void ExpertMode(bool b)
+        {
+            button1.Visible = b;
+            button2.Visible = b;
+            button3.Visible = b;
+            button4.Visible = b;
+            button5.Visible = b;
+            button6.Visible = b;
+
+            label5.Visible = b;
+            label6.Visible = b;
+            label7.Visible = b;
+            label8.Visible = b;
+
+            trackBar1.Visible = b;
+            trackBar2.Visible = b;
+
+            txtReceiveBox.Visible = b;
+            txtDataSendBox.Visible = b;
+
+            sendBTN.Visible = b;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -647,6 +670,9 @@ namespace Soil_moisture_App
             frm.Width = 161;
             frm.Width = 825;
             frm.Height = 780;
+
+            loop_delay_time = trackBar2.Value;
+            ExpertMode(false);
             pictureBoxRssi.Visible = false;
             pictureBoxErrorSensor.Visible = false;
             label8.Text = loop_delay_time.ToString();
@@ -739,15 +765,34 @@ namespace Soil_moisture_App
                 for (int i = 0; i < MAX_NODES; i++)
                 {
                     Node[i].lastping_sensor += 1;
-                    if (Node[i].lastping_sensor >= 2)
+
+                    //if (Node[i].lastping_sensor >= 2)
+                    //    Node[i].error_sensor = true;
+                    //else
+                    //    Node[i].error_sensor = false;
+
+                    if (Node[i].lastping_sensor >= 10)
+                    {
                         Node[i].error_sensor = true;
-                    else
+                        if (i == active_Node)
+                            Node[i].redraw();
+                    }
+                    else if ((i == active_Node) && (Node[i].lastping_sensor >= 2))
+                    {
                         Node[i].error_sensor = false;
+                        if (i == active_Node)
+                            Node[i].redraw();
+                    }
+                    else
+                    {
+                        Node[i].error_sensor = false;
+                    }
 
                 }
             }
 
         }
+
 
         public int active_Node
         {
@@ -795,6 +840,12 @@ namespace Soil_moisture_App
         {
             loop_delay_time = trackBar2.Value;
             label8.Text = loop_delay_time.ToString();
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            timerErrorRssi.Stop();
+            timerErrorSensor.Stop();
         }
     }
 }
