@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.IO.Ports;
+using System.IO;
 
 
 namespace Soil_moisture_App
@@ -86,6 +87,10 @@ namespace Soil_moisture_App
         volatile int initFlag = 0;
         volatile bool wireless_Flag = false;
 
+        public StringBuilder csv;
+
+        public string filePath = "\\\\Mac\\Home\\Desktop\\log.csv";
+
         public Thread bgThread = null;
 
         public Form1()
@@ -109,6 +114,8 @@ namespace Soil_moisture_App
             moisLab.Text = "--%";
             rssiLab.Text = "--";
 
+            csv = new StringBuilder();
+
             mainThread = SynchronizationContext.Current;
             if (mainThread == null) mainThread = new SynchronizationContext();
 
@@ -127,7 +134,7 @@ namespace Soil_moisture_App
                     disconBTN.Enabled = true;
                     conBTN.Enabled = false;
                     caliBTN.Enabled = true;
-                    txtReceiveBox.AppendText("[" + get_dtn() + "] " + "Connected\n");
+                    txtReceiveBox.AppendText("[" + get_dtn_time() + "] " + "Connected\n");
                     sport.DataReceived += new SerialDataReceivedEventHandler(sport_DataReceived);
 
                     // Create the thread object. This does not start the thread.
@@ -135,7 +142,7 @@ namespace Soil_moisture_App
 
                     bgThread.IsBackground = true;
                     bgThread.Start();
-                    txtReceiveBox.AppendText("[" + get_dtn() + "] " + "Background Thread started and Paused\n");
+                    txtReceiveBox.AppendText("[" + get_dtn_time() + "] " + "Background Thread started and Paused\n");
                 }
                 catch (Exception ex) { MessageBox.Show(ex.ToString(), "Error"); }}
 
@@ -170,11 +177,17 @@ namespace Soil_moisture_App
             }, null);
         }
 
-        public String get_dtn()
+        public String get_dtn_time()
         {
             DateTime dt = DateTime.Now;
             //return dt.ToShortTimeString();
             return dt.ToLongTimeString();
+        }
+
+        public String get_dtn_date()
+        {
+            DateTime dt = DateTime.Now;
+            return dt.ToShortDateString();
         }
 
         public void CaliFormCallback(byte m)
@@ -235,13 +248,23 @@ namespace Soil_moisture_App
             {
                 mainThread.Send((object state) =>
                 {
-                    if (processReceivedCmd(cmdBack))
-                        txtReceiveBox.AppendText("[" + get_dtn() + "] " + "rec: cmd: " + CMD_array[Convert.ToByte(cmdBack.cmd) - 'A'] + "  val1: " + cmdBack.val1.ToString() + "  val2: " + cmdBack.val2.ToString() + "\n");
+                    if (processReceivedCmd(cmdBack)){
+                        txtReceiveBox.AppendText("[" + get_dtn_time() + "] " + "rec: cmd: " + CMD_array[Convert.ToByte(cmdBack.cmd) - 'A'] + "  val1: " + cmdBack.val1.ToString() + "  val2: " + cmdBack.val2.ToString() + "\n");
+
+                        String newLine = string.Format("{0};{1};{2};{3};{4}",get_dtn_date()+" "+get_dtn_time(), cmdBack.id, CMD_array[Convert.ToByte(cmdBack.cmd) - 'A'], cmdBack.val1.ToString(), cmdBack.val2.ToString());
+                        csv.AppendLine(newLine);
+
+                        if (csv.Length > 2000)
+                        {
+                            File.AppendAllText(filePath, csv.ToString());
+                        }
+                        
+
                         //if(cmdBack.cmd == (byte)CMDs.CMD_RSSI)
                         //    txtReceiveBox.AppendText("[" + get_dtn() + "] " + "rec: cmd: " + str.ToString() + "\n");
-
+                    }
                     else
-                        txtReceiveBox.AppendText("[" + get_dtn() + "] " + "rec: cmd: " + str.ToString() + "\n");
+                        txtReceiveBox.AppendText("[" + get_dtn_time() + "] " + "rec: cmd: " + str.ToString() + "\n");
 
                 }, null);
             }
@@ -339,7 +362,7 @@ namespace Soil_moisture_App
                     break;
                 case (byte)CMDs.CMD_TEST:
                     moisLab.Text = c.val1.ToString();
-                    txtReceiveBox.AppendText("[" + get_dtn() + "] " + "received TEST" + "\n");
+                    txtReceiveBox.AppendText("[" + get_dtn_time() + "] " + "received TEST" + "\n");
                     _backgroundPause = false;
                     break;
                     /*
@@ -352,8 +375,8 @@ namespace Soil_moisture_App
                      */
                 case(byte)CMDs.CMD_VERS:
                     initFlag = 1;
-                    txtReceiveBox.AppendText("[" + get_dtn() + "] " + "Software VERSION : " + c.val1.ToString() + "\n");
-                    txtReceiveBox.AppendText("[" + get_dtn() + "] " + "         BUILD   : " + c.val2.ToString() + "\n");
+                    txtReceiveBox.AppendText("[" + get_dtn_time() + "] " + "Software VERSION : " + c.val1.ToString() + "\n");
+                    txtReceiveBox.AppendText("[" + get_dtn_time() + "] " + "         BUILD   : " + c.val2.ToString() + "\n");
 
                     versionLab.Text = "v" + Convert.ToString(c.val1/100) + "." + Convert.ToString(c.val1%100);
                     versionLab.Text += "  build:" + Convert.ToString(c.val2);
@@ -369,7 +392,7 @@ namespace Soil_moisture_App
 
                     break;
                 case(byte)CMDs.CMD_RSSI:
-                    txtReceiveBox.AppendText("[" + get_dtn() + "] " + "received RSSI :" + c.val1.ToString() +"\n");
+                    txtReceiveBox.AppendText("[" + get_dtn_time() + "] " + "received RSSI :" + c.val1.ToString() +"\n");
 
                     
                     Node[c.id].set_rssi(c.val1);
@@ -479,7 +502,7 @@ namespace Soil_moisture_App
         {
             String data = txtDataSendBox.Text;
             sport.Write(data);
-            txtReceiveBox.AppendText("[" + get_dtn() + "] " + "Sent: " + data + "\n");
+            txtReceiveBox.AppendText("[" + get_dtn_time() + "] " + "Sent: " + data + "\n");
         }
 
         private void disconBTN_Click(object sender, EventArgs e)
@@ -501,7 +524,7 @@ namespace Soil_moisture_App
                     disconBTN.Enabled = false;
                     caliBTN.Enabled = false;
                     conBTN.Enabled = true;
-                    txtReceiveBox.AppendText("[" + get_dtn() + "] " + "Disconnected\n");
+                    txtReceiveBox.AppendText("[" + get_dtn_time() + "] " + "Disconnected\n");
                 }
             }
 
@@ -512,7 +535,7 @@ namespace Soil_moisture_App
         private void caliBTN_Click(object sender, EventArgs e)
         {
             _backgroundPause = true;
-            txtReceiveBox.AppendText("[" + get_dtn() + "] " + "Start Calibration!\n");
+            txtReceiveBox.AppendText("[" + get_dtn_time() + "] " + "Start Calibration!\n");
             CaliForm = new CalibrationForm(this);
             CaliForm.Show();
         }
@@ -844,8 +867,9 @@ namespace Soil_moisture_App
 
         private void button7_Click(object sender, EventArgs e)
         {
-            timerErrorRssi.Stop();
-            timerErrorSensor.Stop();
+            //timerErrorRssi.Stop();
+            //timerErrorSensor.Stop();
+            txtReceiveBox.AppendText(get_dtn_date());
         }
     }
 }
