@@ -867,9 +867,21 @@ namespace Soil_moisture_App
 
         private void button7_Click(object sender, EventArgs e)
         {
-            //timerErrorRssi.Stop();
-            //timerErrorSensor.Stop();
-            txtReceiveBox.AppendText(get_dtn_date());
+            timerErrorRssi.Stop();
+            timerErrorSensor.Stop();
+            //txtReceiveBox.AppendText(get_dtn_date());
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.FileName = "log.csv";
+            DialogResult result = saveFileDialog1.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                string file = saveFileDialog1.FileName;
+                filePath = file;
+                button8.Text = file;
+            }
         }
     }
 }
