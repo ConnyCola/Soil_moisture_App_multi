@@ -88,8 +88,8 @@ namespace Soil_moisture_App
         volatile bool wireless_Flag = false;
 
         public StringBuilder csv;
-
         public string filePath = "\\\\Mac\\Home\\Desktop\\log.csv";
+        public bool logToFile_Flag = false;
 
         public Thread bgThread = null;
 
@@ -239,6 +239,17 @@ namespace Soil_moisture_App
 
         }
 
+        private void saveToCSV(cmdStruct cmd){
+            String newLine = string.Format("{0};{1};{2};{3};{4}", get_dtn_date() + " " + get_dtn_time(), cmd.id, CMD_array[Convert.ToByte(cmd.cmd) - 'A'], cmd.val1.ToString(), cmd.val2.ToString());
+            csv.AppendLine(newLine);
+
+            if (csv.Length > 2000)
+            {
+                File.AppendAllText(filePath, csv.ToString());
+                csv.Remove(0, csv.Length);
+            }
+        }
+
         private void sport_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             String str = sport.ReadLine();
@@ -251,15 +262,9 @@ namespace Soil_moisture_App
                     if (processReceivedCmd(cmdBack)){
                         txtReceiveBox.AppendText("[" + get_dtn_time() + "] " + "rec: cmd: " + CMD_array[Convert.ToByte(cmdBack.cmd) - 'A'] + "  val1: " + cmdBack.val1.ToString() + "  val2: " + cmdBack.val2.ToString() + "\n");
 
-                        String newLine = string.Format("{0};{1};{2};{3};{4}",get_dtn_date()+" "+get_dtn_time(), cmdBack.id, CMD_array[Convert.ToByte(cmdBack.cmd) - 'A'], cmdBack.val1.ToString(), cmdBack.val2.ToString());
-                        csv.AppendLine(newLine);
-
-                        if (csv.Length > 2000)
-                        {
-                            File.AppendAllText(filePath, csv.ToString());
-                        }
-                        
-
+                        if (logToFile_Flag == true)
+                            saveToCSV(cmdBack);
+                  
                         //if(cmdBack.cmd == (byte)CMDs.CMD_RSSI)
                         //    txtReceiveBox.AppendText("[" + get_dtn() + "] " + "rec: cmd: " + str.ToString() + "\n");
                     }
@@ -867,9 +872,22 @@ namespace Soil_moisture_App
 
         private void button7_Click(object sender, EventArgs e)
         {
-            //timerErrorRssi.Stop();
-            //timerErrorSensor.Stop();
-            txtReceiveBox.AppendText(get_dtn_date());
+            timerErrorRssi.Stop();
+            timerErrorSensor.Stop();
+            //txtReceiveBox.AppendText(get_dtn_date());
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.FileName = "log.csv";
+            DialogResult result = saveFileDialog1.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                string file = saveFileDialog1.FileName;
+                filePath = file;
+                button8.Text = file;
+                logToFile_Flag = true;
+            }
         }
     }
 }
