@@ -16,7 +16,6 @@ using System.IO;
 namespace Soil_moisture_App
 {
 
-
     public enum CMDs : byte
     {
         CMD_MOIS = (byte)'A',
