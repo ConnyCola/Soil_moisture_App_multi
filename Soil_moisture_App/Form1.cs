@@ -886,7 +886,7 @@ namespace Soil_moisture_App
 
         private void button8_Click(object sender, EventArgs e)
         {
-            
+
             saveFileDialog1.FileName = "log.csv";
             DialogResult result = saveFileDialog1.ShowDialog();
             if (result == DialogResult.OK)
@@ -901,6 +901,6 @@ namespace Soil_moisture_App
         private void trackBar2_Scroll(object sender, EventArgs e)
         {
 
+            }
         }
-    }
 }
