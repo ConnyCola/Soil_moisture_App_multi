@@ -66,7 +66,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.label8 = new System.Windows.Forms.Label();
-            this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
@@ -159,10 +158,10 @@
             this.groupBoxActiveNode.Controls.Add(this.minMoisLab);
             this.groupBoxActiveNode.Controls.Add(this.moisLab);
             this.groupBoxActiveNode.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.groupBoxActiveNode.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.916231F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxActiveNode.Location = new System.Drawing.Point(12, 278);
+            this.groupBoxActiveNode.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.06283F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBoxActiveNode.Location = new System.Drawing.Point(12, 346);
             this.groupBoxActiveNode.Name = "groupBoxActiveNode";
-            this.groupBoxActiveNode.Size = new System.Drawing.Size(277, 213);
+            this.groupBoxActiveNode.Size = new System.Drawing.Size(277, 318);
             this.groupBoxActiveNode.TabIndex = 7;
             this.groupBoxActiveNode.TabStop = false;
             this.groupBoxActiveNode.Text = "Node00";
@@ -171,7 +170,7 @@
             // pictureBoxErrorSensor
             // 
             this.pictureBoxErrorSensor.Image = global::Soil_moisture_App.Properties.Resources.warning;
-            this.pictureBoxErrorSensor.Location = new System.Drawing.Point(19, 68);
+            this.pictureBoxErrorSensor.Location = new System.Drawing.Point(18, 43);
             this.pictureBoxErrorSensor.Name = "pictureBoxErrorSensor";
             this.pictureBoxErrorSensor.Size = new System.Drawing.Size(84, 70);
             this.pictureBoxErrorSensor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -214,7 +213,7 @@
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Segoe Print", 7.162304F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 26);
+            this.label1.Location = new System.Drawing.Point(12, 106);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(69, 35);
             this.label1.TabIndex = 0;
@@ -254,7 +253,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe Print", 7.162304F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(108, 510);
+            this.label2.Location = new System.Drawing.Point(12, 604);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(47, 35);
             this.label2.TabIndex = 0;
@@ -263,7 +262,7 @@
             // rssiLab
             // 
             this.rssiLab.Font = new System.Drawing.Font("Segoe Print", 18.09424F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rssiLab.Location = new System.Drawing.Point(56, 498);
+            this.rssiLab.Location = new System.Drawing.Point(56, 566);
             this.rssiLab.Name = "rssiLab";
             this.rssiLab.Size = new System.Drawing.Size(233, 80);
             this.rssiLab.TabIndex = 0;
@@ -333,7 +332,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(12, 227);
+            this.checkBox1.Location = new System.Drawing.Point(18, 301);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(159, 30);
             this.checkBox1.TabIndex = 12;
@@ -366,9 +365,9 @@
             // 
             // progressBarRSSI
             // 
-            this.progressBarRSSI.Location = new System.Drawing.Point(97, 576);
+            this.progressBarRSSI.Location = new System.Drawing.Point(12, 649);
             this.progressBarRSSI.Name = "progressBarRSSI";
-            this.progressBarRSSI.Size = new System.Drawing.Size(187, 10);
+            this.progressBarRSSI.Size = new System.Drawing.Size(277, 15);
             this.progressBarRSSI.TabIndex = 16;
             // 
             // timerErrorSensor
@@ -379,7 +378,7 @@
             // pictureBoxRssi
             // 
             this.pictureBoxRssi.Image = global::Soil_moisture_App.Properties.Resources.wifi_0;
-            this.pictureBoxRssi.Location = new System.Drawing.Point(220, 226);
+            this.pictureBoxRssi.Location = new System.Drawing.Point(220, 294);
             this.pictureBoxRssi.Name = "pictureBoxRssi";
             this.pictureBoxRssi.Size = new System.Drawing.Size(65, 60);
             this.pictureBoxRssi.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -390,7 +389,7 @@
             // 
             // versionLab
             // 
-            this.versionLab.Location = new System.Drawing.Point(804, 1357);
+            this.versionLab.Location = new System.Drawing.Point(96, 669);
             this.versionLab.Name = "versionLab";
             this.versionLab.Size = new System.Drawing.Size(193, 23);
             this.versionLab.TabIndex = 17;
@@ -422,6 +421,7 @@
             this.trackBar2.Size = new System.Drawing.Size(210, 90);
             this.trackBar2.TabIndex = 20;
             this.trackBar2.Value = 80;
+            this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
             this.trackBar2.ValueChanged += new System.EventHandler(this.trackBar2_ValueChanged);
             // 
             // label8
@@ -433,21 +433,11 @@
             this.label8.TabIndex = 21;
             this.label8.Text = "label8";
             // 
-            // button7
-            // 
-            this.button7.Location = new System.Drawing.Point(56, 657);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(192, 32);
-            this.button7.TabIndex = 22;
-            this.button7.Text = "test";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(56, 612);
+            this.button8.Location = new System.Drawing.Point(12, 227);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(192, 39);
+            this.button8.Size = new System.Drawing.Size(277, 52);
             this.button8.TabIndex = 23;
             this.button8.Text = "LogFile Path";
             this.button8.UseVisualStyleBackColor = true;
@@ -463,7 +453,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1367, 1401);
             this.Controls.Add(this.button8);
-            this.Controls.Add(this.button7);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.trackBar2);
             this.Controls.Add(this.label7);
@@ -546,7 +535,6 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TrackBar trackBar2;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;

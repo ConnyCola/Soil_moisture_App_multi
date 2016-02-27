@@ -1,4 +1,7 @@
 ﻿
+//#define PANEL
+
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,8 +13,10 @@ using System.Threading;
 using System.Windows.Forms;
 using System.IO.Ports;
 
+
 namespace Soil_moisture_App
 {
+
     public class SensorNode
     {
         public int pos_x, pos_y;
@@ -32,6 +37,7 @@ namespace Soil_moisture_App
         
 
         public GroupBox gb;
+        public Panel pl;
         public Button btn;
         public ProgressBar pb;
         public Label lb;
@@ -50,15 +56,25 @@ namespace Soil_moisture_App
             pos_y = y;
             mois = v;
             id = _id;
+            mois = 0;
+            rssi = 0;
         }
 
         public void draw()
         {
+#if PANEL
+            pl = new Panel();
+            pl.Location = new System.Drawing.Point(pos_x, pos_y);
+            pl.Size = new System.Drawing.Size(60, 50);
+            pl.Name = "pl" + name;
+            pl.BackColor = System.Drawing.Color.LightGray;
+#else
             gb = new GroupBox();
             gb.Location = new System.Drawing.Point(pos_x, pos_y);
             gb.Size = new System.Drawing.Size(60, 50);
             gb.Name = "gb" + name;
             gb.Text = name;
+#endif
 
             btn = new Button();
             btn.Location = new System.Drawing.Point(5, 10);
@@ -84,13 +100,25 @@ namespace Soil_moisture_App
             pb.Value = mois;
 
 
-            //gb.Controls.Add(btn);
+
+#if PANEL
+            pl.Controls.Add(lb);
+            pl.Controls.Add(pb);
+
+            form.Controls.Add(pl);
+            pl.Click += new System.EventHandler(this.gbClick);
+
+#else
             gb.Controls.Add(lb);
             gb.Controls.Add(pb);
-            //gb.Refresh();
-            form.Controls.Add(gb);
 
+
+            form.Controls.Add(gb);
             gb.Click += new System.EventHandler(this.gbClick);
+#endif
+            ////gb.Refresh();
+            
+
             lb.Click += new System.EventHandler(this.lbClick);
         }
 
@@ -99,6 +127,10 @@ namespace Soil_moisture_App
             mois = v;
             pb.Value = mois;
             lb.Text = mois.ToString() + " %";
+#if PANEL
+            if(id != form.active_Node)
+                pl.BackColor = System.Drawing.Color.FromArgb(255-mois, 255-mois, 255);
+#endif
         }
 
         public void set_rssi(int r)
@@ -113,18 +145,49 @@ namespace Soil_moisture_App
             {
                 pb.Visible = true;
                 lb.Visible = true;
+
+#if PANEL
+                pl.Visible = true;
+                pl.Enabled = true;
+#else
                 gb.Visible = true;
                 gb.Enabled = true;
+#endif
 
             }
             else
             {
                 pb.Visible = false;
                 lb.Visible = false;
+#if PANEL
+                pl.Enabled = false;
+#else
                 gb.Enabled = false;
-                //gb.Visible = false;
+#endif
             }
 
+        }
+
+        public void highlight(bool b)
+        {
+            if (b)
+            {
+#if PANEL
+                pl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+                //pl.BackColor = System.Drawing.Color.LightBlue;
+#else
+                gb.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.916231F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+#endif
+            }
+            else
+            {
+#if PANEL
+                //pl.BackColor = System.Drawing.Color.LightGray;
+                pl.BorderStyle = System.Windows.Forms.BorderStyle.None;
+#else
+                gb.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.916231F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+#endif
+            }
         }
 
         public void redraw(){
@@ -136,7 +199,7 @@ namespace Soil_moisture_App
 
         public void gbClick(object sender, EventArgs e)
         {
-            GroupBox gb_sender = sender as GroupBox;
+            //GroupBox gb_sender = sender as GroupBox;
             form.active_Node = id; //Int16.Parse(gb_sender.Name.Substring(6, 2));
         }
 

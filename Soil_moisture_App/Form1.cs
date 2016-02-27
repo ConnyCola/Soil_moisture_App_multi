@@ -526,10 +526,10 @@ namespace Soil_moisture_App
                     while (sport.BytesToRead != 0 && sport.BytesToRead != 0) ;
                     sport.Close();
 
-                    disconBTN.Enabled = false;
                     caliBTN.Enabled = false;
                     conBTN.Enabled = true;
                     txtReceiveBox.AppendText("[" + get_dtn_time() + "] " + "Disconnected\n");
+                    disconBTN.Enabled = false;
                 }
             }
 
@@ -826,7 +826,15 @@ namespace Soil_moisture_App
         {
             get {   return Int16.Parse(groupBoxActiveNode.Text.Substring(4, 2)); }
             set {   moisLab.Text = Node[value].mois.ToString() + "%";
-                    
+                int old_value = Int16.Parse(groupBoxActiveNode.Text.Substring(4, 2));
+
+                if (value != old_value)
+                {
+                    Node[value].highlight(true);
+                    Node[old_value].highlight(false);
+                }
+
+
                 // Mois ProgessBAR
                     progressBarActiveNode.Value = Node[value].mois;
                 // GroupBox
@@ -879,6 +887,7 @@ namespace Soil_moisture_App
 
         private void button8_Click(object sender, EventArgs e)
         {
+            
             saveFileDialog1.FileName = "log.csv";
             DialogResult result = saveFileDialog1.ShowDialog();
             if (result == DialogResult.OK)
@@ -888,6 +897,11 @@ namespace Soil_moisture_App
                 button8.Text = file;
                 logToFile_Flag = true;
             }
+        }
+
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+
         }
     }
 }
